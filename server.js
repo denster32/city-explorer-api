@@ -31,22 +31,26 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to my server');
 });
 
-app.get('/hello', (request, response) => {
-  console.log(request.query);
+// app.get('/hello', (request, response) => {
+//   console.log(request.query);
 
-  let firstName = request.query.firstName;
-  let lastName = request.query.lastName;
+//   let firstName = request.query.firstName;
+//   let lastName = request.query.lastName;
 
-  response.status(200).send(`Hello ${firstName} ${lastName}!  Welcome to my server!`);
-});
+//   response.status(200).send(`Hello ${firstName} ${lastName}!  Welcome to my server!`);
+// });
 
 app.get('/weather', (req, res, next) => {
-  let lat = req.query.lat;
-  let lon = req.query.lon;
-  let searchQuery = req.query.searchQuery;
+  try {
+    let latInput = req.query.lat;
+    let lonInput = req.query.lon;
+    let searchQuery = req.query.searchQuery;
+    let city = req.query.city;
+    let dataToGroom = data.find(pet => pet.city === city);
 
-  let city = req.query.city;
-  let dataToGroom = data.find(pet => pet.city === city);
+  } catch (error) {
+    next(error);
+  }
 });
 
 
