@@ -11,7 +11,6 @@ const { response } = require('express');
 // *** DONT FORGET TO REQUIRE YOUR START JSON FILE
 let data = require('./data/weather.json');
 
-
 // *** ONCE EXPRESS IS IN, WE NEED TO USE IT
 // *** app === server
 const app = express();
@@ -20,10 +19,8 @@ const app = express();
 // *** cors is middleware - security guard that allows us to share resources across the internet
 app.use(cors());
 
-
 // *** DEFINE A PORT FOR MY SERVER TO RUN ON ***
 const PORT = process.env.PORT || 3002;
-
 
 // *** ENDPOINTS ***
 // *** Base endpoint - proof of life
@@ -43,36 +40,53 @@ app.get('/hello', (request, response) => {
   response.status(200).send(`Hello ${firstName} ${lastName}!  Welcome to my server!`);
 });
 
-app.get('/pet', (request, response, next) => {
-  try {
-    let species = request.query.species;
-    //     let city = request.query.city;
-    let dataToGroom = data.find(pet => pet.species === species);
-    //     let dataToGroom = data.find(pet => pet.city === city);
+app.get('/weather', (req, res, next) => {
+  let lat = req.query.lat;
+  let lon = req.query.lon;
+  let searchQuery = req.query.searchQuery;
 
-    let dataToSend = new Pet(dataToGroom);
-    response.status(200).send(dataToSend);
-
-  } catch (error) {
-    next(error);
-  }
-
+  let city = req.query.city;
+  let dataToGroom = data.find(pet => pet.city === city);
 });
 
 
+// app.get('/pet', (request, response, next) => {
+//   try {
+//     let species = request.query.species;
+//     //     let city = request.query.city;
+//     let dataToGroom = data.find(pet => pet.species === species);
+//     //     let dataToGroom = data.find(pet => pet.city === city);
+
+//     let dataToSend = new Pet(dataToGroom);
+//     response.status(200).send(dataToSend);
+
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+
 // *** CLASS TO GROOM BULKY DATA ***
-class Pet {
-  constructor(petObj) {
-    this.name = petObj.name;
-    this.breed = petObj.breed;
+class Weather {
+  constructor(weatherObj) {
+    this.name = weatherObj.name;
+    this.breed = weatherObj.breed;
   }
-};
+}
+
+
+
+// class Pet {
+//   constructor(petObj) {
+//     this.name = petObj.name;
+//     this.breed = petObj.breed;
+//   }
+// };
 
 // *** CATCH ALL ENDPOINT - NEEDS TO BE LAST DEFINED ENDPOINT
 app.get('*', (request, response) => {
   response.status(404).send('This page does not exist');
 });
-
 
 // *** ERROR HANDLING - PLUG AND PLAY CODE FROM EXPRESS DOCS
 app.use((error, request, response, next) => {
