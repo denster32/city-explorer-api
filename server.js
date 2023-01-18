@@ -54,38 +54,13 @@ app.get('/weather', (req, res, next) => {
 });
 
 
-// app.get('/pet', (request, response, next) => {
-//   try {
-//     let species = request.query.species;
-//     //     let city = request.query.city;
-//     let dataToGroom = data.find(pet => pet.species === species);
-//     //     let dataToGroom = data.find(pet => pet.city === city);
-
-//     let dataToSend = new Pet(dataToGroom);
-//     response.status(200).send(dataToSend);
-
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-
 // *** CLASS TO GROOM BULKY DATA ***
-class Weather {
+class Forecast {
   constructor(weatherObj) {
-    this.name = weatherObj.name;
-    this.breed = weatherObj.breed;
+    this.date = weatherObj.date;
+    this.description = weatherObj.description;
   }
 }
-
-
-
-// class Pet {
-//   constructor(petObj) {
-//     this.name = petObj.name;
-//     this.breed = petObj.breed;
-//   }
-// };
 
 // *** CATCH ALL ENDPOINT - NEEDS TO BE LAST DEFINED ENDPOINT
 app.get('*', (request, response) => {
