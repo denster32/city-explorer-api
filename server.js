@@ -39,15 +39,22 @@ app.get('/', (request, response) => {
 
 //   response.status(200).send(`Hello ${firstName} ${lastName}!  Welcome to my server!`);
 // });
-
-app.get('/weather', (req, res, next) => {
+// *** DEFINE WEATHER ENDPOINT W FOLLOWING QUEURIES - lat, lon, searchQeury
+app.get('/weather', (request, response, next) => {
   try {
-    let latInput = req.query.lat;
-    let lonInput = req.query.lon;
-    let searchQuery = req.query.searchQuery;
-    let city = req.query.city;
-    let dataToGroom = data.find(pet => pet.city === city);
+    let lat = request.query.lat;
+    let lon = request.query.lon;
+    let searchQuery = request.query.searchQuery;
 
+    let cityName = request.query.searchQuery;
+    console.log(request.query);
+
+
+    let city = data.find(city => city.city_name.toLowerCase() === cityName.toLowerCase());
+
+    let weatherData = city.data.map(dayObj => new Forecast(dayObj));
+
+    response.status(200).send(city);
   } catch (error) {
     next(error);
   }
@@ -56,9 +63,9 @@ app.get('/weather', (req, res, next) => {
 
 // *** CLASS TO GROOM BULKY DATA ***
 class Forecast {
-  constructor(weatherObj) {
-    this.date = weatherObj.date;
-    this.description = weatherObj.description;
+  constructor(dayObj) {
+    this.date = dayObj.valid_date;
+    this.description = dayObj.weather.description;
   }
 }
 
